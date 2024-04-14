@@ -2,7 +2,8 @@ import streamlit as st
 from google.cloud import firestore
 import time
 import pandas as pd
-
+import json
+from google.oauth2 import service_account
 st.set_page_config(
   page_title="Policumbent",
   page_icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLBnwH3bm6RwJvsl1-w4PDKxydP6wUIJNDs9pMaI1lpw&s", 
@@ -19,7 +20,10 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 
 @st.cache_resource
 def connect_to_db():
-	return firestore.Client.from_service_account_json("firestone-key.json")
+  key_dict = json.loads(st.secrets["textkey"])
+  creds = service_account.Credentials.from_service_account_info(key_dict,)
+  return firestore.Client(credentials=creds)
+
 #use caching to avoid establishing the connection every rerun of the app
 
 #declaration of some state variables that will persists on reruns:
