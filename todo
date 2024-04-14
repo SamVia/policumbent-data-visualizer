@@ -1,0 +1,17 @@
+"""TODO
+    from SETTINGS: add proper viable settings:
+    -app color
+    ?
+
+    CREDITS: add cretits to programmer
+
+    RECORDS: use straight link to github repo?
+
+    HOME: brief description of app?
+
+    UPDATE: 
+    1.fetch data from current firebase data (needs to be already saved in its proper format _yyyy_mm_dd)
+    2. first check if name already in sqlite3 db if not proceed to save it in.
+    3. find a way to push said db into the repository
+    4.message of saving complete
+    """
