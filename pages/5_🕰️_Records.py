@@ -28,17 +28,21 @@ def get_table_names(conn):
     table_names = [table[0] for table in tables]
     return table_names
 
+def convert_table_name(table_name):
+    parts = table_name.split("_")
+    year = int(parts[1])
+    month = int(parts[2])
+    day = int(parts[3])
+    date = f"{day}/{month}/{year}"
+    return date
 # Retrieve table names
 tables = get_table_names(conn)
-
+formatted_table_names = [convert_table_name(table_name) for table_name in tables]
 # Select a table
-option = st.selectbox(
-    'Which table do you want to visualize?',
-    tables
-)
+option =  st.selectbox('Select a table', range(len(formatted_table_names)), format_func=lambda i: formatted_table_names[i])
 
 # Query the database for the selected columns
-query = f"SELECT id, velocity, timestamp FROM {option}"
+query = f"SELECT id, velocity, timestamp FROM {tables[option]}"
 df = pd.read_sql_query(query, conn)
 
 # Display the retrieved data for debugging
