@@ -16,18 +16,20 @@ hide_st_style = """
 """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
-
+# @st.cache_resource
+def connect_to_db():
 # Connect to SQLite database
-conn = sqlite3.connect('test.db')
+  return sqlite3.connect('test.db')
 
 # List of tables in the database
-def get_table_names(conn):
+@st.cache_data()
+def get_table_names(_conn):
     cursor = conn.cursor()
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
     tables = cursor.fetchall()
     table_names = [table[0] for table in tables]
     return table_names
-
+@st.cache_data()
 def convert_table_name(table_name):
     parts = table_name.split("_")
     year = int(parts[1])
@@ -36,6 +38,7 @@ def convert_table_name(table_name):
     date = f"{day}/{month}/{year}"
     return date
 # Retrieve table names
+conn = connect_to_db()
 tables = get_table_names(conn)
 formatted_table_names = [convert_table_name(table_name) for table_name in tables]
 # Select a table
