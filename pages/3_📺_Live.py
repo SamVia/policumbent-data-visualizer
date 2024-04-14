@@ -160,4 +160,4 @@ while st.session_state.same_read < 100:
 	st.rerun()
 else:
 	st.write("final stage")
-	collection()
+	collection(-1)
