@@ -17,7 +17,7 @@ def updateDB():
     
     repo = git.Repo(r"C:\Users\ACER\Desktop\testa\test_python")
     username= "SamVia"
-    password = "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"
+    password = ""
     remote = f"https://{username}:{password}@github.com/SamVia/test_python"
     
     repo.git.add(os.path.realpath("test.db"))
