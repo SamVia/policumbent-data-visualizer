@@ -41,7 +41,33 @@ def check_file_permissions(file_path):
 
       st.write(f"Execute permission is not granted for file: {file_path}")
 
-st.write(os.path.realpath("test_python/test.tb"))
-check_file_permissions(os.path.realpath("test_python/test.tb"))
-os.chmod("test_python/test.tb", 0o777)
-check_file_permissions(os.path.realpath("test_python/test.tb"))
+# st.write(os.path.realpath("test_python/test.tb"))
+# check_file_permissions(os.path.realpath("test_python/test.tb"))
+# os.chmod("test_python/test.tb", 0o777)
+# check_file_permissions(os.path.realpath("test_python/test.tb"))
+
+# Assuming you are currently in the 'START' directory
+start_directory = os.getcwd()
+
+# Navigate to the 'REPO' directory within the 'START' directory
+repo_directory = os.path.join(start_directory, "test_python")
+
+# Check if the 'REPO' directory exists
+if os.path.exists(repo_directory):
+    # Change the current working directory to the 'REPO' directory
+    os.chdir(repo_directory)
+
+    # Open and read the file 'FILE' within the 'REPO' directory
+    file_path = "test.tb"
+    full_file_path = os.path.join(repo_directory, "test.tb")
+
+    # Check if the file exists
+    if os.path.exists(full_file_path):
+        # Open and read the file
+      check_file_permissions(full_file_path)
+    else:
+        print("File not found.")
+else:
+    print("Repository directory not found.")
+os.chmod(full_file_path, 0o777)
+check_file_permissions(full_file_path)
