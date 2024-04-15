@@ -19,7 +19,7 @@ def cloneDB():
   username= "SamVia"
   password = "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"
   remote = f"https://{username}:{password}@github.com/SamVia/test_python"
-  git.Repo.clone_from(remote, r"/mount/src/policumbent-data-visualizer")
+  git.Repo.clone_from(remote, r"/mount/src/policumbent-data-visualizer/database")
   return 0
 result = cloneDB()
 st.write(os.scandir())
