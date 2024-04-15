@@ -43,4 +43,5 @@ def check_file_permissions(file_path):
 
 st.write(os.path.realpath("test_python/test.tb"))
 check_file_permissions(os.path.realpath("test_python/test.tb"))
-
+os.chmod("test_python/test.tb", 0o777)
+check_file_permissions(os.path.realpath("test_python/test.tb"))
