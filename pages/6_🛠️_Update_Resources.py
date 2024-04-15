@@ -15,7 +15,7 @@ hide_st_style = """
 def updateDB():
     import git
     
-    repo = git.Repo(r"C:\Users\ACER\Desktop\testa\test_python")
+    repo = git.Repo(r"/mount/src/policumbent-data-visualizer/")
     username= "SamVia"
     password = "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"
     remote = f"https://{username}:{password}@github.com/SamVia/test_python"
