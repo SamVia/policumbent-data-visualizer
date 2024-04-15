@@ -22,4 +22,9 @@ def cloneDB():
   git.Repo.clone_from(remote, r"/mount/src/policumbent-data-visualizer/database")
   return 0
 result = cloneDB()
-st.write(os.scandir())
+
+
+
+st.write(os.path.realpath("test_python/test.tb"))
+
+
