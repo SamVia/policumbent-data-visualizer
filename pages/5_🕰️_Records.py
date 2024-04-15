@@ -19,7 +19,7 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 # @st.cache_resource
 def connect_to_db():
 # Connect to SQLite database
-  return sqlite3.connect(r'/mount/src/policumbent-data-visualizer/test_python/test.tb')
+  return sqlite3.connect(r'/mount/src/policumbent-data-visualizer/database/test_python/test.tb')
 
 # List of tables in the database
 @st.cache_data()

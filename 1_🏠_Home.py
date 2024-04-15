@@ -50,8 +50,8 @@ def check_file_permissions(file_path):
 start_directory = os.getcwd()
 
 # Navigate to the 'REPO' directory within the 'START' directory
-repo_directory = os.path.join(start_directory, "test_python")
-
+repo_directory = os.path.join(start_directory, "database/test_python")
+full_file_path = ""
 # Check if the 'REPO' directory exists
 if os.path.exists(repo_directory):
     # Change the current working directory to the 'REPO' directory
