@@ -46,13 +46,14 @@ option =  st.selectbox('Select a table', range(len(formatted_table_names)), form
 # Query the database for the selected columns
 query = f"SELECT id, velocity, timestamp FROM {tables[option]}"
 df = pd.read_sql_query(query, conn)
-
+average_velocity = df['velocity'].mean()
 # Display the retrieved data for debugging
 st.write("DataFrame:")
 st.dataframe(df, use_container_width=True, hide_index=True)
 
 # Plot the data if DataFrame is not empty
 if not df.empty:
+    st.write(f'##Average velocity: {average_velocity} km/h')
     st.write(f'## Plot of velocity over ID')
     st.line_chart(df.set_index('id')['velocity'])
     "-------"
@@ -64,6 +65,5 @@ if not df.empty:
 
 else:
     st.write("DataFrame is empty.")
-
 # Close the connection
 conn.close()
