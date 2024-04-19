@@ -21,7 +21,7 @@ def connect_to_db():
   return sqlite3.connect(r'/mount/src/policumbent-data-visualizer/test.tb')
 
 # List of tables in the database
-@st.cache_data()
+
 def get_table_names(_conn):
     cursor = conn.cursor()
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
