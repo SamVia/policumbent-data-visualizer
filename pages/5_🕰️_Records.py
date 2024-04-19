@@ -16,7 +16,6 @@ hide_st_style = """
 """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
-# @st.cache_resource
 def connect_to_db():
 # Connect to SQLite database
   return sqlite3.connect(r'/mount/src/policumbent-data-visualizer/test.tb')
@@ -29,7 +28,7 @@ def get_table_names(_conn):
     tables = cursor.fetchall()
     table_names = [table[0] for table in tables]
     return table_names
-@st.cache_data()
+
 def convert_table_name(table_name):
     parts = table_name.split("_")
     year = int(parts[1])
