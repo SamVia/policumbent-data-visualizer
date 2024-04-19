@@ -53,7 +53,7 @@ st.dataframe(df, use_container_width=True, hide_index=True)
 
 # Plot the data if DataFrame is not empty
 if not df.empty:
-    st.write(f'##Average velocity: {average_velocity} km/h')
+    st.write(f'## Average velocity: {average_velocity} km/h')
     st.write(f'## Plot of velocity over ID')
     st.line_chart(df.set_index('id')['velocity'])
     "-------"
