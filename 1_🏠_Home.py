@@ -56,7 +56,7 @@ try:
         repo = git.Repo(repo_dir)
 except: pass
 
-decode_base64_file(database_path=r'/mount/src/policumbent-data-visualizer/test.db')
+decode_base64_file(database_path=r'/mount/src/policumbent-data-visualizer/database/test.db')
 
 
 #change current working directory to where the database is:
