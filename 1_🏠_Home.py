@@ -54,7 +54,7 @@ try:
         st.write("cloning")
         git.Repo.clone_from("https://github.com/SamVia/test_python.git", repo_dir, branch='master', depth=1, auth=("token", pat))
         repo = git.Repo(repo_dir)
-except: pass
+except Exception as e: st.write(e)
 
 decode_base64_file(database_path=r'/mount/src/policumbent-data-visualizer/database/test.db')
 
