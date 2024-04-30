@@ -21,7 +21,7 @@ st.write("home page")
 
 
 pat = st.secrets["pat"]
-repo_dir = "/mount/src/test_python/database"
+repo_dir = "/mount/src/policumbent-data-visualizer/database"
 username = "SamVia"
 repo_name = "Policumbent-Database"
 remote = f"https://{username}:{pat}@github.com/{username}/{repo_name}.git"
@@ -60,8 +60,8 @@ decode_base64_file(database_path=r'/mount/src/policumbent-data-visualizer/test.d
 
 
 #change current working directory to where the database is:
-os.chdir("/mount/src/test_python/database")
+os.chdir(repo_dir)
 #change permissions to database file and folder#
 os.chmod("/mount/src/test_python/database/test.db", 0o777)
 os.chmod("/mount/src/test_python/database", 0o777)
-os.chdir("/mount/src/test_python")
+os.chdir("/mount/src/policumbent-data-visualizer")
