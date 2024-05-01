@@ -46,13 +46,14 @@ def verify_password(username, plain_password, stored_hash, salt):
 
 
 if not st.session_state.auth:
-    username = st.text_input("username",type="password")
-    password = st.text_input("password",type="password")
-
-    if verify_password(username = username, plain_password = password, stored_hash= st.secrets["hash"], salt = st.secrets["salt"]):
-        st.session_state.aut = True
-        st.empty()
-        st.rerun()
+    username = str(st.text_input("username",type="password"))
+    password = str(st.text_input("password",type="password"))
+    if st.button("login"):
+        st.spinner("logging in")
+        if verify_password(username = username, plain_password = password, stored_hash= st.secrets["hash"], salt = st.secrets["salt"]):
+            st.session_state.aut = True
+            st.empty()
+            st.rerun()
 else:
     g = Github(st.secrets["pat"])
 # Then get the specific repo
