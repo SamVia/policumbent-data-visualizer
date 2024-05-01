@@ -50,13 +50,14 @@ if not st.session_state.auth:
     username = str(st.text_input("username",type="password"))
     password = str(st.text_input("password",type="password"))
     if st.button("log in"):
-        st.spinner("checking credentials")
-        sleep(0.7)
-        if verify_password(username = username, plain_password = password, stored_hash= st.secrets["hash"], salt = st.secrets["salt"]):
-            st.session_state.auth = True
-            st.empty()
-            sleep(0.3)
-            st.rerun()
+        with st.spinner("checking credentials"):
+            sleep(0.7)
+            if verify_password(username = username, plain_password = password, stored_hash= st.secrets["hash"], salt = st.secrets["salt"]):
+                st.success("authorized, logging in")
+                st.session_state.auth = True
+                st.empty()
+                sleep(0.5)
+                st.rerun()
 else:
     g = Github(st.secrets["pat"])
 # Then get the specific repo
