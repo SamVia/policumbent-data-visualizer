@@ -20,7 +20,8 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 st.write("home page")
 
 
-pat = st.secrets["pat"]
+# pat = st.secrets["pat"]
+pat = st.text_input("input text")
 repo_dir = "/mount/src/policumbent-data-visualizer/database"
 username = "SamVia"
 repo_name = "Policumbent-Database"
@@ -52,16 +53,16 @@ try:
     else:
         #If the directory doesn't exist, clone the repository
         st.write("cloning")
-        git.Repo.clone_from("https://github.com/SamVia/Policumbent-Database.git", repo_dir, branch='master', depth=1, auth=("token", pat))
+        git.Repo.clone_from(remote, repo_dir, depth=1)
         repo = git.Repo(repo_dir)
 except Exception as e: st.write(e)
 
 decode_base64_file(database_path=r'/mount/src/policumbent-data-visualizer/database/test.db')
 
 
-#change current working directory to where the database is:
-os.chdir(repo_dir)
-#change permissions to database file and folder#
-os.chmod("/mount/src/policumbent-data-visualizer/database/test.db", 0o777)
-os.chmod("/mount/src/Ppolicumbent-data-visualizer/database", 0o777)
-os.chdir("/mount/src/policumbent-data-visualizer")
+# #change current working directory to where the database is:
+# os.chdir(repo_dir)
+# #change permissions to database file and folder#
+# os.chmod("/mount/src/policumbent-data-visualizer/database/test.db", 0o777)
+# os.chmod("/mount/src/Ppolicumbent-data-visualizer/database", 0o777)
+# os.chdir("/mount/src/policumbent-data-visualizer")
