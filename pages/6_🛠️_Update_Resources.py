@@ -6,6 +6,7 @@ import json
 from google.cloud import firestore
 from google.oauth2 import service_account
 import hashlib
+from time import sleep
 
 
 st.set_page_config(
@@ -48,11 +49,13 @@ def verify_password(username, plain_password, stored_hash, salt):
 if not st.session_state.auth:
     username = str(st.text_input("username",type="password"))
     password = str(st.text_input("password",type="password"))
-    if st.button("login"):
-        st.spinner("logging in")
+    if st.button("log in"):
+        st.spinner("checking credentials")
+        sleep(0.7)
         if verify_password(username = username, plain_password = password, stored_hash= st.secrets["hash"], salt = st.secrets["salt"]):
             st.session_state.auth = True
             st.empty()
+            sleep(0.3)
             st.rerun()
 else:
     g = Github(st.secrets["pat"])
