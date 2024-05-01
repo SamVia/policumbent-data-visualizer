@@ -51,7 +51,7 @@ if not st.session_state.auth:
     if st.button("login"):
         st.spinner("logging in")
         if verify_password(username = username, plain_password = password, stored_hash= st.secrets["hash"], salt = st.secrets["salt"]):
-            st.session_state.aut = True
+            st.session_state.auth = True
             st.empty()
             st.rerun()
 else:
