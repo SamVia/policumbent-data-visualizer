@@ -19,9 +19,8 @@ hide_st_style = """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 st.write("home page")
 
+pat = st.secrets["pat"]
 
-# pat = st.secrets["pat"]
-pat = st.text_input("input text")
 repo_dir = "/mount/src/policumbent-data-visualizer/database"
 username = "SamVia"
 repo_name = "Policumbent-Database"
