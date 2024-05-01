@@ -63,4 +63,4 @@ decode_base64_file(database_path=r'/mount/src/policumbent-data-visualizer/databa
 
 #change permissions to database file and folder#
 os.chmod("/mount/src/policumbent-data-visualizer/database/test.db", 0o777)
-os.chmod("/mount/src/Ppolicumbent-data-visualizer/database", 0o777)
+os.chmod("/mount/src/policumbent-data-visualizer/database", 0o777)
