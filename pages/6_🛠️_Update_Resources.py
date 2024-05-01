@@ -96,7 +96,7 @@ g = Github(st.secrets["pat"])
 repo = g.get_user().get_repo("Policumbent-Database")
 
 # Get the ref for the file
-contents = repo.get_contents("new_db.db")
+contents = repo.get_contents("test.db")
 
 os.chdir("/mount/src/policumbent-data-visualizer/database/")
 
