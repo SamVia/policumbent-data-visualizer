@@ -49,7 +49,7 @@ if not st.session_state.auth:
     username = st.text_input("username",type="password")
     password = st.text_input("password",type="password")
 
-    if verify_password(username = username, plain_password = password, stored_salt = st.secrets["hash"], salt = st.secrets["salt"]):
+    if verify_password(username = username, plain_password = password, stored_hash= st.secrets["hash"], salt = st.secrets["salt"]):
         st.session_state.aut = True
         st.empty()
         st.rerun()
