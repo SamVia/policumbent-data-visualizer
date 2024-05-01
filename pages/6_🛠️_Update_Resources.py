@@ -44,7 +44,7 @@ def fillDB():
     day = random.randint(0,31)
     timed = datetime.now()
     table_name =  f"_{timed.year+5000}_{timed.month+1}_{day}"
-    db = r".\new_db.db"
+    db = r"/mount/src/policumbent-data-visualizer/database/new_db.db"
     conn = create_connection(db)
 
 
