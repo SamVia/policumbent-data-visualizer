@@ -26,7 +26,7 @@ username = "SamVia"
 repo_name = "Policumbent-Database"
 remote = f"https://{username}:{pat}@github.com/{username}/{repo_name}.git"
 
-def decode_base64_file(database_path):
+def decode_base64_file(database_path, new_path):
     # Read the base64-encoded content from the input file
     try:
         with open(database_path, "rb") as file:
@@ -36,7 +36,7 @@ def decode_base64_file(database_path):
         decoded_content = base64.b64decode(encoded_content)
 
         # Write the decoded content to the output file
-        with open(database_path, "wb") as file:
+        with open(new_path, "wb") as file:
             file.write(decoded_content)
     except:
         st.write("there has been an error reading the file")
@@ -56,11 +56,8 @@ try:
         repo = git.Repo(repo_dir)
 except Exception as e: st.write(e)
 
-decode_base64_file(database_path=r'/mount/src/policumbent-data-visualizer/database/test.db')
-
-
-#change current working directory to where the database is:
 
 #change permissions to database file and folder#
 os.chmod("/mount/src/policumbent-data-visualizer/database/test.db", 0o777)
 os.chmod("/mount/src/policumbent-data-visualizer/database", 0o777)
+decode_base64_file(database_path=r'/mount/src/policumbent-data-visualizer/database/test.db', new_path="/mount/src/policumbent-data-visualizer/database/new_db.db")
