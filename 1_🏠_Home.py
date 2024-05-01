@@ -17,7 +17,8 @@ hide_st_style = """
 
 
 st.markdown(hide_st_style, unsafe_allow_html=True)
-st.write("home page")
+st.header("Policumbent Data Visualizer")
+st.text("visualize both real-time data stream and past races!")
 
 pat = st.secrets["pat"]
 
