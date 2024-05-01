@@ -2,76 +2,10 @@ import streamlit as st
 import os
 from github import Github
 import base64
-
-
-#removable
-def fillDB():
-    import sqlite3 as sq
-    import random
-    from datetime import datetime
-
-    def create_connection(db_file):
-        conn = None
-        try:
-            conn = sq.connect(db_file)
-            print(sq.version)
-        except sq.Error as e:
-            print(e)
-        return conn
-
-    def create_table(conn, table_sql):
-        try:
-            c = conn.cursor()
-            c.execute(table_sql)
-        except sq.Error as e:
-            print(e)
-            
-    def generate_str_table(name):
-        sql_create_table = f"CREATE TABLE IF NOT EXISTS {name} (\n"
-        sql_create_table += "id INTEGER PRIMARY KEY,\n"
-        sql_create_table += "velocity REAL NOT NULL,\n"
-        sql_create_table += "day INTEGER NOT NULL,\n"
-        sql_create_table += "timestamp TEXT NOT NULL\n"
-        sql_create_table += ");"
-        return sql_create_table
-
-    def insert_create(conn, element, name):
-        sql_insert = f"INSERT INTO {name}(id, velocity, day, timestamp) VALUES(?, ?, ?, ?)"
-        cur = conn.cursor()
-        cur.execute(sql_insert, (element["id"], element["velocity"], element["day"], element["timestamp"]))
-        conn.commit()
-        return cur.lastrowid
-    day = random.randint(0,31)
-    timed = datetime.now()
-    table_name =  f"_{timed.year+5000}_{timed.month+1}_{day}"
-    db = r"/mount/src/policumbent-data-visualizer/database/new_db.db"
-    conn = create_connection(db)
-
-
-    if conn is not None:
-        table = generate_str_table(table_name)
-        create_table(conn, table)
-        print("connection successful")
-        
-        
-        for i in range(3):
-            element = {
-                "id": i,
-                "velocity": random.randint(0, 10) + random.randint(0, 10)/10,
-                "day": day,
-                "timestamp": f"{random.randint(0, 23)}:{random.randint(0, 59)}:{random.randint(0, 59)}"
-            }
-            insert_create(conn, element, table_name)
-            print("Inserting element")
-    else:
-        print("no connection established")
-    print("DONE")
-    conn.close()
-#removable
-
-
-
-
+import json
+from google.cloud import firestore
+from google.oauth2 import service_account
+import hashlib
 
 
 st.set_page_config(
@@ -88,56 +22,60 @@ hide_st_style = """
 """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
-#/mount/src/policumbent-data-visualizer/database/new_db.db
+#check password and user?
+
+
+#connection to firebase and fetch all current data
+@st.cache_resource
+def connect_to_db():
+  key_dict = json.loads(st.secrets["textkey"])
+  creds = service_account.Credentials.from_service_account_info(key_dict,)
+  return firestore.Client(credentials=creds)
+
+if "auth" not in st.session_state:
+    st.session_state.auth = False
+
+def verify_password(username, plain_password, stored_hash, salt):
+    # Hash the input password with the stored salt
+    combined = f"{username}{plain_password}{salt}"
+    hashed_password = hashlib.sha256(combined.encode()).hexdigest()
+    # Compare with the stored hash
+    return hashed_password == stored_hash
 
 #establish github object
-g = Github(st.secrets["pat"])
+
+
+if not st.session_state.auth:
+    username = st.text_input("username",type="password")
+    password = st.text_input("password",type="password")
+
+    if verify_password(username = username, plain_password = password, stored_salt = st.secrets["hash"], salt = st.secrets["salt"]):
+        st.session_state.aut = True
+        st.empty()
+        st.rerun()
+else:
+    g = Github(st.secrets["pat"])
 # Then get the specific repo
-repo = g.get_user().get_repo("Policumbent-Database")
+    repo = g.get_user().get_repo("Policumbent-Database")
+    # Get the ref for the file
+    contents = repo.get_contents("test.db")
 
-# Get the ref for the file
-contents = repo.get_contents("test.db")
+    os.chdir("/mount/src/policumbent-data-visualizer/database/") 
+    if st.button("commit"):
+        try:
+            #encoding database content in base64 format
+            with open("/mount/src/policumbent-data-visualizer/database/new_db.db", "rb") as file:
+                content = file.read()
+                content_encoded = base64.b64encode(content)
+        except Exception as e:
+            st.write(e)
+        try:
+            #pushing database to repo
+            repo.update_file(path=contents.path, message="updated database", content=content_encoded.decode(), sha=contents.sha)
+            print("File updated successfully.")
+        except Exception as e:
+            st.write(e)
 
-os.chdir("/mount/src/policumbent-data-visualizer/database/")
+    os.chdir("/mount/src/policumbent-data-visualizer/")
 
-
-
-def updateDB():
-    import git
-    
-    repo = git.Repo(r"/mount/src/policumbent-data-visualizer/database/")
-    username= "SamVia"
-    password = st.secrets["pat"]
-    remote = f"https://{username}:{password}@github.com/SamVia/Policumbent-Database"
-    
-    repo.git.add(os.path.realpath("new_db.db"))
-    repo.index.commit("pushed db")
-
-    origin = repo.remote(name="origin")
-    origin.push()
-
-
-
-if st.button("commit"):
-    try:
-        with open("/mount/src/policumbent-data-visualizer/database/new_db.db", "rb") as file:
-            content = file.read()
-            content_encoded = base64.b64encode(content)
-    except Exception as e:
-        st.write(e)
-    try:
-        repo.update_file(path=contents.path, message="updated database", content=content_encoded.decode(), sha=contents.sha)
-        print("File updated successfully.")
-    except Exception as e:
-        st.write(e)
-os.chdir("//mount/src/policumbent-data-visualizer/")
-
-g.close()
-
-if st.button("add row to db:"):
-    fillDB()
-    st.write("entry added")
-
-st.write("update database:")
-if st.button("update"):
-    updateDB()
+    g.close()
