@@ -108,9 +108,9 @@ def collection(delay):
 		speed = st.session_state.collection[0]["velocity"]
 		col2.write(f"current speed: {speed}m/s")
 		col2.divider()
-		col2.write(f"average speed: {round(st.session_state.average/len(st.session_state.collection),2)}km/h")
+		col2.write(f"average speed: {round(st.session_state.average/len(st.session_state.collection),2)} km/h")
 		col2.divider()
-		col2.write(f'maximum speed: {max(st.session_state.collection, key=lambda x:x["velocity"])["velocity"]}')
+		col2.write(f'maximum speed: {max(st.session_state.collection, key=lambda x:x["velocity"])["velocity"]} km/h')
 
 	if delay>0:
 		time.sleep(delay)
