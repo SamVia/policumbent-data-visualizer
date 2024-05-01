@@ -59,9 +59,8 @@ except Exception as e: st.write(e)
 decode_base64_file(database_path=r'/mount/src/policumbent-data-visualizer/database/test.db')
 
 
-# #change current working directory to where the database is:
-# os.chdir(repo_dir)
-# #change permissions to database file and folder#
-# os.chmod("/mount/src/policumbent-data-visualizer/database/test.db", 0o777)
-# os.chmod("/mount/src/Ppolicumbent-data-visualizer/database", 0o777)
-# os.chdir("/mount/src/policumbent-data-visualizer")
+#change current working directory to where the database is:
+
+#change permissions to database file and folder#
+os.chmod("/mount/src/policumbent-data-visualizer/database/test.db", 0o777)
+os.chmod("/mount/src/Ppolicumbent-data-visualizer/database", 0o777)
