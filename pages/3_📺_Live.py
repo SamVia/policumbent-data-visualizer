@@ -244,9 +244,9 @@ if st.session_state.current_name in names:
 		collection(-1)
 		# names = db.collections()
 		
-		
-		for name in names:
-			
-			updateDB(name=name, data = db.collection(name).order_by("id",direction=firestore.Query.ASCENDING).get())
+		with st.spinner("updating database"):
+			for name in names:
+				updateDB(name=name, data = db.collection(name).order_by("id",direction=firestore.Query.ASCENDING).get())
+		st.success("updating done!")
 else:
 	st.header("No race today, we can rest!")
