@@ -234,4 +234,4 @@ else:
 	
 	for name in names:
 		
-		updateDB(name=name.id, data = db.collection(name).order_by("id",direction=firestore.Query.ASCENDING).get())
+		updateDB(name=name.id, data = db.collection(name.id).order_by("id",direction=firestore.Query.ASCENDING).get())
