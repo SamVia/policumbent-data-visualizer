@@ -56,7 +56,7 @@ def firstRead(db):
 	reads the db once at the start, prevents a loss of initial data streamed, it is added in bulk not real time.
 	'''
 	try:
-		data = db.collection("test1").order_by("id",direction=firestore.Query.ASCENDING).get()
+		data = db.collection("_5000_5_5").order_by("id",direction=firestore.Query.ASCENDING).get()
 		if len(data)>0:
 			current_read = []
 			
@@ -78,7 +78,7 @@ def cleanDB(db):
 	erases all data in the database, used for testing purposes
 	'''
 	try:
-		doc_ref = db.collection("test1")#use name of the current collection WARNING it will erase all data in that collection
+		doc_ref = db.collection("_5000_5_5")#use name of the current collection WARNING it will erase all data in that collection
 		for doc in doc_ref.stream():
 			doc_ref.document(doc.id).delete()
 		#cleanup of variables
@@ -151,7 +151,7 @@ def templateDB(db):
 	create an instance in the database with temp data, can be used to test working conditions and see how data is represented.
 	'''
 	try:
-		doc_ref = db.collection("test1").document("template")
+		doc_ref = db.collection("_5000_5_5").document("template")
 		doc_ref.set({
 			"id":0,
 			"velocity": 1,
@@ -201,7 +201,7 @@ if st.session_state.First:
 while st.session_state.same_read < 30:
 	#query for data: gets data from "insert_name" in descending order (Higher to Lower), then limited to 6
 	#from testing 3 seems the right amount, with 2 there seems to be around 0.6% loss of ids, with 3 out of 5 tests there has been 0 loss
-	data = db.collection("test1").order_by("id",direction=firestore.Query.DESCENDING).limit(3).get()
+	data = db.collection("_5000_5_5").order_by("id",direction=firestore.Query.DESCENDING).limit(3).get()
 	#check on data len -> if 0 there has been 0 matches
 
 	if len(data)>0:
