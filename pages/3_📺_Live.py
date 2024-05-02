@@ -134,7 +134,7 @@ def updateDB(data, name):
 					d_to_dict = d.to_dict()
 					insert_create(conn, d_to_dict, name)
 					print("Inserting element")
-					
+
 	else:
 		print("no connection established")
 	#1. check if table name is in database names, if yes skip
@@ -231,4 +231,5 @@ else:
 	collection(-1)
 	names = db.collections()
 	for name in names:
+		name = name.id
 		updateDB(name=name, data = db.collection(name).order_by("id",direction=firestore.Query.ASCENDING).get())
