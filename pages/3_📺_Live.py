@@ -230,7 +230,7 @@ else:
 	st.write("final stage")
 	collection(-1)
 	names = db.collections()
-	st.write(names.to_dict)
+	st.write(names.to_dict())
 	
 	# for name in names:
 	# 	name = name.id
