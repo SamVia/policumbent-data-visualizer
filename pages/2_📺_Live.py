@@ -20,7 +20,8 @@ hide_st_style = """
 	</stile>
 """
 st.markdown(hide_st_style, unsafe_allow_html=True)
-st.sidebar.markdown("""<style>
+with st.sidebar:
+    st.sidebar.markdown("""<style>
 .reportview-container .main .block-container {
     max-width: 120px;
     padding-top: 2rem;
