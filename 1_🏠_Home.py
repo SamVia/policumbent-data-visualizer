@@ -2,9 +2,11 @@ import streamlit as st
 import git
 import os
 import base64
+
 st.set_page_config(
   page_title="Policumbent",
-  page_icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLBnwH3bm6RwJvsl1-w4PDKxydP6wUIJNDs9pMaI1lpw&s", 
+  page_icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLBnwH3bm6RwJvsl1-w4PDKxydP6wUIJNDs9pMaI1lpw&s",
+  layout="centered" 
 )
 #code to hide streamlit normal view
 hide_st_style = """
@@ -46,13 +48,13 @@ def decode_base64_file(database_path, new_path):
 try:
     if os.path.isdir(repo_dir):
         # If the directory already exists, just pull the changes
-        st.write("pulling")
+        print("pulling")
         repo = git.Repo(repo_dir)
         repo.remotes.origin.pull()
         
     else:
         #If the directory doesn't exist, clone the repository
-        st.write("cloning")
+        print("cloning")
         git.Repo.clone_from(remote, repo_dir, depth=1)
         repo = git.Repo(repo_dir)
 except Exception as e: st.write(e)

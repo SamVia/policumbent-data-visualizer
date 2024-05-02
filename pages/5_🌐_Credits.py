@@ -2,7 +2,8 @@ import streamlit as st
 
 st.set_page_config(
   page_title="Policumbent",
-  page_icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLBnwH3bm6RwJvsl1-w4PDKxydP6wUIJNDs9pMaI1lpw&s", 
+  page_icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLBnwH3bm6RwJvsl1-w4PDKxydP6wUIJNDs9pMaI1lpw&s",
+  layout="centered" 
 )
 #code to hide streamlit normal view
 hide_st_style = """
@@ -14,8 +15,9 @@ hide_st_style = """
 """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
-
 def display_image(img_link):
+    """function to generate markdown for displaying image
+    """
     return f"""
                 <div class="image-container">
     <img src="{img_link}" alt="Description of the image" 
@@ -31,6 +33,8 @@ def display_image(img_link):
 </div>"""
 
 def display_text(text):
+    """generates markdown for a text field in similar fashion to others, need printable text as input
+    """
     return f"""<head>
     <style>
     .custom-text {{
@@ -75,8 +79,9 @@ def display_text(text):
 </div>
 </body>
 """
+
 def button_logo(site, logo, circle):
-    """
+    """generates markdown for a button to a site
     accepts site link, logo link better if png, and circle is true if the logo is circular else false
     """
     if circle: circle = "border-radius:50%;"
@@ -114,6 +119,7 @@ def button_logo(site, logo, circle):
 """
 
 st.title("Credits")
+#markdown for all tools used in this project
 st.markdown("""<!DOCTYPE html>
 <html>
 <head>
@@ -151,10 +157,8 @@ st.markdown("""<!DOCTYPE html>
 </div>
 </body>
 </html>
-       """
-                
-                
-                , unsafe_allow_html=True)
+       """, unsafe_allow_html=True)
+
 st.divider()
 col1, col2,col3 = st.columns(3)
 with col1:
@@ -169,6 +173,8 @@ with col1:
     with columns[1]:
        st.markdown(button_logo("https://www.linkedin.com/in/samuele-vianello/","https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/LinkedIn_logo_initials.png/640px-LinkedIn_logo_initials.png",False), unsafe_allow_html=True)
     
+
+
 
 
 template = """

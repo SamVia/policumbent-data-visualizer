@@ -8,7 +8,8 @@ import sqlite3 as sq
 
 st.set_page_config(
   page_title="Policumbent",
-  page_icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLBnwH3bm6RwJvsl1-w4PDKxydP6wUIJNDs9pMaI1lpw&s", 
+  page_icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLBnwH3bm6RwJvsl1-w4PDKxydP6wUIJNDs9pMaI1lpw&s",
+  layout="centered" 
 )
 #code to hide streamlit normal view
 hide_st_style = """
@@ -21,13 +22,14 @@ hide_st_style = """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
 if "current_name" not in st.session_state:
+	#check if the current date is in the database
 	from datetime import datetime
 	current = datetime.now()
 	st.session_state.current_name = f"_{current.year}_{current.month}_{current.day}"
 
 
 
-
+#use caching to avoid establishing the connection every rerun of the app
 @st.cache_resource
 def connect_to_db():
 	key_dict = json.loads(st.secrets["textkey"])
@@ -46,7 +48,7 @@ def get_table_names(conn):
     tables = cursor.fetchall()
     table_names = [table[0] for table in tables]
     return table_names
-#use caching to avoid establishing the connection every rerun of the app
+
 
 #declaration of some state variables that will persists on reruns:
 if "collection" not in st.session_state:
@@ -128,11 +130,7 @@ def insert_create(conn, element, name):
 
 
 def updateDB(data, name):
-
-	
 	conn = sq.connect(r'/mount/src/policumbent-data-visualizer/database/new_db.db')
-
-
 	if conn is not None:
 		
 		names = get_table_names(conn)
@@ -231,9 +229,7 @@ if st.session_state.current_name in names:
 				st.session_state.same_read = 0
 
 		collection(0.2)
-		
-		
-		
+
 		st.rerun()
 	else:
 		#when entering the final stage, current day data is being displayed for the whole day

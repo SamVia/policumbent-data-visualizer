@@ -4,7 +4,8 @@ import pandas as pd
 
 st.set_page_config(
   page_title="Policumbent",
-  page_icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLBnwH3bm6RwJvsl1-w4PDKxydP6wUIJNDs9pMaI1lpw&s", 
+  page_icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLBnwH3bm6RwJvsl1-w4PDKxydP6wUIJNDs9pMaI1lpw&s",
+  layout="centered" 
 )
 #code to hide streamlit normal view
 hide_st_style = """
@@ -17,12 +18,23 @@ hide_st_style = """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
 def connect_to_db():
-# Connect to SQLite database
-  return sqlite3.connect(r'/mount/src/policumbent-data-visualizer/database/new_db.db')
+    """Connect to SQLite database
+
+    Returns:
+        sqlite3 connection: connection to database
+    """
+    return sqlite3.connect(r'/mount/src/policumbent-data-visualizer/database/new_db.db')
 
 # List of tables in the database
-
 def get_table_names(_conn):
+    """extracts all names present in the database
+
+    Args:
+        _conn (sqlite3 connection)
+
+    Returns:
+        list: table names
+    """
     cursor = conn.cursor()
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
     tables = cursor.fetchall()
@@ -30,12 +42,15 @@ def get_table_names(_conn):
     return table_names
 
 def convert_table_name(table_name):
+    """converts table names from '_yyyy_mm_dd to dd/mm/yyyy
+    """
     parts = table_name.split("_")
     year = int(parts[1])
     month = int(parts[2])
     day = int(parts[3])
     date = f"{day}/{month}/{year}"
     return date
+
 # Retrieve table names
 conn = connect_to_db()
 tables = get_table_names(conn)
