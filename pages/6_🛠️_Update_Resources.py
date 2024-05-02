@@ -81,6 +81,7 @@ else:
             print("File updated successfully.")
         except Exception as e:
             st.write(e)
+        st.succes("commit done!")
 
     os.chdir("/mount/src/policumbent-data-visualizer/")
 
