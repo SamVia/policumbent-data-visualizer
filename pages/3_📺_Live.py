@@ -20,11 +20,24 @@ hide_st_style = """
 """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
+if "current_name" not in st.session_state:
+	from datetime import datetime
+	current = datetime.now()
+	st.session_state.current_name = f"_{current.year}_{current.month}_{current.day}"
+
+
+
+
 @st.cache_resource
 def connect_to_db():
-  key_dict = json.loads(st.secrets["textkey"])
-  creds = service_account.Credentials.from_service_account_info(key_dict,)
-  return firestore.Client(credentials=creds)
+	key_dict = json.loads(st.secrets["textkey"])
+	creds = service_account.Credentials.from_service_account_info(key_dict,)
+	credentials = firestore.Client(credentials=creds)
+	t_names = credentials.collections()
+	names = []
+	for n in t_names:
+		names.append(n.id)
+	return credentials, names
 
 
 def get_table_names(conn):
@@ -142,10 +155,6 @@ def updateDB(data, name):
 	#3. loop through list of dicts
 	
 
-
-
-
-
 def templateDB(db):
 	'''
 	create an instance in the database with temp data, can be used to test working conditions and see how data is represented.
@@ -183,7 +192,7 @@ def collection(delay):
 
 
 
-db = connect_to_db() # establish connection
+db, names = connect_to_db() # establish connection
 
 if st.button("delete"):
 		st.write(cleanDB(db))
@@ -191,47 +200,53 @@ if st.button("delete"):
 if st.button("create"):
 	#temp
 	st.write(templateDB(db))
-if st.session_state.First:
-	first = firstRead(db)
-	collection(0.2)
-	
-	st.session_state.First = False
-	st.rerun()
-#if number of same instances is less than 100 (20s) execute queries else idle 
-while st.session_state.same_read < 30:
-	#query for data: gets data from "insert_name" in descending order (Higher to Lower), then limited to 6
-	#from testing 3 seems the right amount, with 2 there seems to be around 0.6% loss of ids, with 3 out of 5 tests there has been 0 loss
-	data = db.collection("_5000_5_5").order_by("id",direction=firestore.Query.DESCENDING).limit(3).get()
-	#check on data len -> if 0 there has been 0 matches
 
-	if len(data)>0:
-		current_read = []
+
+#check first if today's table name is in the database, then continue with normal execution	
+if st.session_state.current_name in names:
+	if st.session_state.First:
+		first = firstRead(db)
+		collection(0.2)
 		
-		for r in data:
-			r_td = r.to_dict() #transform r object in data to a dict
-			current_read.append(r_td["id"])
+		st.session_state.First = False
+		st.rerun()
+	#if number of same instances is less than 100 (20s) execute queries else idle 
+	while st.session_state.same_read < 30:
+		#query for data: gets data from "insert_name" in descending order (Higher to Lower), then limited to 6
+		#from testing 3 seems the right amount, with 2 there seems to be around 0.6% loss of ids, with 3 out of 5 tests there has been 0 loss
+		data = db.collection("_5000_5_5").order_by("id",direction=firestore.Query.DESCENDING).limit(3).get()
+		#check on data len -> if 0 there has been 0 matches
 
-			if r_td["id"] not in st.session_state.read_ids:
-				#only if the id is not yet in the list of the previously read ids it is then added to the list of known data
-				st.session_state.collection.insert(0, r_td)
-				st.session_state.average += r_td["velocity"]
-		if current_read == st.session_state.read_ids:
-			st.session_state.same_read += 1 #match in the previously read and currently read increases +1
-		else:
-			st.session_state.read_ids = current_read
-			st.session_state.same_read = 0
+		if len(data)>0:
+			current_read = []
+			
+			for r in data:
+				r_td = r.to_dict() #transform r object in data to a dict
+				current_read.append(r_td["id"])
 
-	collection(0.2)
-	
-	
-	
-	st.rerun()
+				if r_td["id"] not in st.session_state.read_ids:
+					#only if the id is not yet in the list of the previously read ids it is then added to the list of known data
+					st.session_state.collection.insert(0, r_td)
+					st.session_state.average += r_td["velocity"]
+			if current_read == st.session_state.read_ids:
+				st.session_state.same_read += 1 #match in the previously read and currently read increases +1
+			else:
+				st.session_state.read_ids = current_read
+				st.session_state.same_read = 0
+
+		collection(0.2)
+		
+		
+		
+		st.rerun()
+	else:
+		st.write("final stage")
+		collection(-1)
+		# names = db.collections()
+		
+		
+		for name in names:
+			
+			updateDB(name=name.id, data = db.collection(name.id).order_by("id",direction=firestore.Query.ASCENDING).get())
 else:
-	st.write("final stage")
-	collection(-1)
-	names = db.collections()
-	
-	
-	for name in names:
-		
-		updateDB(name=name.id, data = db.collection(name.id).order_by("id",direction=firestore.Query.ASCENDING).get())
+	st.header("No race today, we can rest!")
