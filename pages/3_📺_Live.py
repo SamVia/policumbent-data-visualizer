@@ -230,9 +230,8 @@ else:
 	st.write("final stage")
 	collection(-1)
 	names = db.collections()
-	for name in names:
-		st.write(name.id)
 	
-	# for name in names:
-	# 	name = name.id
-	# 	updateDB(name=name, data = db.collection(name).order_by("id",direction=firestore.Query.ASCENDING).get())
+	
+	for name in names:
+		
+		updateDB(name=name.id, data = db.collection(name).order_by("id",direction=firestore.Query.ASCENDING).get())
