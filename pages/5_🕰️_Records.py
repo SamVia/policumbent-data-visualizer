@@ -46,7 +46,7 @@ option =  st.selectbox('Select a table', range(len(formatted_table_names)), form
 # Query the database for the selected columns
 query = f"SELECT id, velocity, timestamp FROM {tables[option]}"
 df = pd.read_sql_query(query, conn)
-average_velocity = df['velocity'].mean()
+average_velocity = round(df['velocity'].mean(),2)
 max_velocity = df['velocity'].max()
 # Display the retrieved data for debugging
 st.write("DataFrame:")

@@ -51,7 +51,7 @@ if not st.session_state.auth:
     password = str(st.text_input("password",type="password"))
     if st.button("log in"):
         with st.spinner("checking credentials"):
-            sleep(1)
+            sleep(1.5)
         if verify_password(username = username, plain_password = password, stored_hash= st.secrets["hash"], salt = st.secrets["salt"]):
             st.success("authorized, logging in")
             st.session_state.auth = True

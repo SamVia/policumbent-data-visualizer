@@ -4,6 +4,8 @@ import time
 import pandas as pd
 import json
 from google.oauth2 import service_account
+import sqlite3 as sq
+
 st.set_page_config(
   page_title="Policumbent",
   page_icon="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLBnwH3bm6RwJvsl1-w4PDKxydP6wUIJNDs9pMaI1lpw&s", 
@@ -24,6 +26,13 @@ def connect_to_db():
   creds = service_account.Credentials.from_service_account_info(key_dict,)
   return firestore.Client(credentials=creds)
 
+@st.cache_data
+def get_table_names(conn):
+    cursor = conn.cursor()
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    tables = cursor.fetchall()
+    table_names = [table[0] for table in tables]
+    return table_names
 #use caching to avoid establishing the connection every rerun of the app
 
 #declaration of some state variables that will persists on reruns:
@@ -80,7 +89,63 @@ def cleanDB(db):
 		return "cleaning done"
 	except:
 		pass
-		
+
+def create_table(conn, table_sql):
+    try:
+        c = conn.cursor()
+        c.execute(table_sql)
+    except sq.Error as e:
+        print(e)
+
+def generate_str_table(name):
+    sql_create_table = f"CREATE TABLE IF NOT EXISTS {name} (\n"
+    sql_create_table += "id INTEGER PRIMARY KEY,\n"
+    sql_create_table += "velocity REAL NOT NULL,\n"
+    sql_create_table += "day INTEGER NOT NULL,\n"
+    sql_create_table += "timestamp TEXT NOT NULL\n"
+    sql_create_table += ");"
+    return sql_create_table
+
+def insert_create(conn, element, name):
+    sql_insert = f"INSERT INTO {name}(id, velocity, day, timestamp) VALUES(?, ?, ?, ?)"
+    cur = conn.cursor()
+    cur.execute(sql_insert, (element["id"], element["velocity"], element["day"], element["timestamp"]))
+    conn.commit()
+    return cur.lastrowid
+
+
+def updateDB(data, name):
+
+	
+	conn = sq.connect(r'/mount/src/policumbent-data-visualizer/database/new_db.db')
+
+
+	if conn is not None:
+
+		names = get_table_names(conn)
+		if name in names:
+			return
+		else:
+			if len(data)>0:
+				table = generate_str_table(name)
+				create_table(conn, table)
+				print("connection successful")
+				for d in data:
+					d_to_dict = d.to_dict()
+					insert_create(conn, d_to_dict, name)
+					print("Inserting element")
+					
+	else:
+		print("no connection established")
+	#1. check if table name is in database names, if yes skip
+	#2. create table with name, with proper fields
+	#3. loop through list of dicts
+	
+
+
+
+
+
 def templateDB(db):
 	'''
 	create an instance in the database with temp data, can be used to test working conditions and see how data is represented.
@@ -133,7 +198,7 @@ if st.session_state.First:
 	st.session_state.First = False
 	st.rerun()
 #if number of same instances is less than 100 (20s) execute queries else idle 
-while st.session_state.same_read < 100:
+while st.session_state.same_read < 30:
 	#query for data: gets data from "insert_name" in descending order (Higher to Lower), then limited to 6
 	#from testing 3 seems the right amount, with 2 there seems to be around 0.6% loss of ids, with 3 out of 5 tests there has been 0 loss
 	data = db.collection("test1").order_by("id",direction=firestore.Query.DESCENDING).limit(3).get()
@@ -164,3 +229,6 @@ while st.session_state.same_read < 100:
 else:
 	st.write("final stage")
 	collection(-1)
+	names = db.collections()
+	for name in names:
+		updateDB(name=name, data = db.collection(name).order_by("id",direction=firestore.Query.ASCENDING).get())
