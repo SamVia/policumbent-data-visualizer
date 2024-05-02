@@ -231,7 +231,7 @@ else:
 	collection(-1)
 	names = db.collections()
 	for name in names:
-		st.write(name.to_dict())
+		st.write(name.id)
 	
 	# for name in names:
 	# 	name = name.id
