@@ -134,12 +134,12 @@ def updateDB(data, name):
 
 
 	if conn is not None:
-
+		
 		names = get_table_names(conn)
 		if name in names:
-			return
+			return #no need to update 
 		else:
-			if len(data)>0:
+			if len(data)>0: #check if there are fields, if not it could be initialized for future uses only
 				table = generate_str_table(name)
 				create_table(conn, table)
 				print("connection successful")
@@ -150,9 +150,6 @@ def updateDB(data, name):
 
 	else:
 		print("no connection established")
-	#1. check if table name is in database names, if yes skip
-	#2. create table with name, with proper fields
-	#3. loop through list of dicts
 	
 
 def templateDB(db):
@@ -172,12 +169,12 @@ def templateDB(db):
 		pass
 def collection(delay):
 	"""
-	writes the table + average if possible
+	writes the table + current average and max speed if possible
 	"""
 	df = pd.DataFrame(st.session_state.collection)
 	col1, col2 = st.columns(2)
 	col1.dataframe(df, use_container_width=True, hide_index=True)
-	if len(st.session_state.collection) > 0:
+	if len(st.session_state.collection) > 1:
 		#check if it possible to form an average and current velocity
 		speed = st.session_state.collection[0]["velocity"]
 		col2.write(f"current speed: {speed}m/s")
@@ -190,17 +187,16 @@ def collection(delay):
 		time.sleep(delay)
 		col1.empty()
 
-
-
 db, names = connect_to_db() # establish connection
+#buttons for testing purposes may be useful in the future.
+# if st.button("delete"):
+# 	#test
+# 	st.write(cleanDB(db))
 
-if st.button("delete"):
-		st.write(cleanDB(db))
-
-if st.button("create"):
-	#temp
-	st.write(templateDB(db))
-
+# if st.button("create"):
+# 	#test
+# 	st.write(templateDB(db))
+st.header("Streaming Data:")
 
 #check first if today's table name is in the database, then continue with normal execution	
 if st.session_state.current_name in names:
@@ -240,11 +236,12 @@ if st.session_state.current_name in names:
 		
 		st.rerun()
 	else:
+		#when entering the final stage, current day data is being displayed for the whole day
 		st.write("final stage")
 		collection(-1)
-		# names = db.collections()
-		
+
 		with st.spinner("updating database"):
+			#for each name in the database collection checks, if there is already data saved, then updates the local db, readying it for commit
 			for name in names:
 				updateDB(name=name, data = db.collection(name).order_by("id",direction=firestore.Query.ASCENDING).get())
 		st.success("updating done!")
