@@ -23,9 +23,6 @@ hide_st_style = """
 """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
-#check password and user?
-
-
 #connection to firebase and fetch all current data
 @st.cache_resource
 def connect_to_db():
@@ -34,24 +31,33 @@ def connect_to_db():
   return firestore.Client(credentials=creds)
 
 if "auth" not in st.session_state:
+    #check on credentials
     st.session_state.auth = False
 
 def verify_password(username, plain_password, stored_hash, salt):
+    """function to check credentials, combines username and password with a salt
+
+    Args:
+        username (String): username field
+        plain_password (String): password field
+        
+    Returns:
+        bool: True if hash is the same
+    """
     # Hash the input password with the stored salt
     combined = f"{username}{plain_password}{salt}"
     hashed_password = hashlib.sha256(combined.encode()).hexdigest()
     # Compare with the stored hash
     return hashed_password == stored_hash
 
-#establish github object
-
-
 if not st.session_state.auth:
+    #while not authorized
     username = str(st.text_input("username",type="password"))
     password = str(st.text_input("password",type="password"))
     if st.button("log in"):
         with st.spinner("checking credentials"):
             sleep(1.5)
+        #check password
         if verify_password(username = username, plain_password = password, stored_hash= st.secrets["hash"], salt = st.secrets["salt"]):
             st.success("authorized, logging in")
             st.session_state.auth = True
@@ -60,8 +66,9 @@ if not st.session_state.auth:
             st.rerun()
         else:st.error("unauthorized user, check credentials")
 else:
+    #creation of github object
     g = Github(st.secrets["pat"])
-# Then get the specific repo
+    # Then get the specific repo
     repo = g.get_user().get_repo("Policumbent-Database")
     # Get the ref for the file
     contents = repo.get_contents("test.db")
@@ -78,10 +85,10 @@ else:
         try:
             #pushing database to repo
             repo.update_file(path=contents.path, message="updated database", content=content_encoded.decode(), sha=contents.sha)
-            print("File updated successfully.")
+            #print("File updated successfully.")
         except Exception as e:
             st.write(e)
-        st.succes("commit done!")
+        st.success("commit done!")
 
     os.chdir("/mount/src/policumbent-data-visualizer/")
 
