@@ -26,7 +26,7 @@ def connect_to_db():
   creds = service_account.Credentials.from_service_account_info(key_dict,)
   return firestore.Client(credentials=creds)
 
-@st.cache_data
+
 def get_table_names(conn):
     cursor = conn.cursor()
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
