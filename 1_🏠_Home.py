@@ -19,6 +19,26 @@ hide_st_style = """
 
 
 st.markdown(hide_st_style, unsafe_allow_html=True)
+st.sidebar.markdown("""<style>
+.reportview-container .main .block-container {
+    max-width: 120px;
+    padding-top: 2rem;
+    padding-right: 2rem;
+    padding-left: 2rem;
+    padding-bottom: 10rem;
+}
+.footer {
+    position: absolute;
+    bottom: -87vh;
+    width: 100%;
+    text-align: center;
+    color:rgba(128,128,128,0.6);
+    font-weight: bold;  
+    font-size: 2.5vh; 
+}
+</style>
+<p class="footer">Version 1.0.0</p>
+""", unsafe_allow_html=True)
 st.header("Policumbent Data Visualizer")
 st.text("visualize both real-time data stream and past races!")
 
