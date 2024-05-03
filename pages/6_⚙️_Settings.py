@@ -16,12 +16,12 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 footer="""<style>
 .footer {
 position: fixed;
-right: 7vh;
+right: -7vh;
 bottom: 0;
 width: 100%;
 background-color: transparent;
 color: rgba(128,128,128,0.6);
-text-align: right;
+text-align: left;
 }
 </style>
 <div class="footer">
