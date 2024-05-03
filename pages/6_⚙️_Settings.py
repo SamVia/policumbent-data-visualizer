@@ -14,6 +14,24 @@ hide_st_style = """
     </stile>
 """
 st.markdown(hide_st_style, unsafe_allow_html=True)
+footer="""<style>
+.footer {
+position: fixed;
+right: 7vh;
+bottom: 0;
+width: 100%;
+background-color: transparent;
+color: rgba(128,128,128,0.6);
+text-align: right;
+}
+</style>
+<div class="footer">
+<p>Version 1.0.0<a style='display: block; text-align: right;</p>
+</div>
+"""
+st.markdown(footer,unsafe_allow_html=True)
+
+
 # st.sidebar.markdown("""<style>
 # .reportview-container .main .block-container {
 #     max-width: 120px;
