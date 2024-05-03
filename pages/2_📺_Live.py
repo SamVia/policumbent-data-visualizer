@@ -21,6 +21,10 @@ hide_st_style = """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 footer="""<style>
 .footer {
+-webkit-user-select: none; 
+-moz-user-select: none; 
+-ms-user-select: none; 
+user-select: none; 
 position: fixed;
 right: -7vh;
 bottom: 0;
