@@ -283,3 +283,5 @@ if st.session_state.current_name in names:
 		st.success("updating done!")
 else:
 	st.header("No race today, we can rest!")
+	if st.button("check if race started", key="clear_cache"):
+		st.cache_resource.clear()
