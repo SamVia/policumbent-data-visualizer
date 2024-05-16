@@ -194,6 +194,7 @@ st.markdown("""<!DOCTYPE html>
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/935px-Python-logo-notext.svg.png" alt="" style="position:relative; top:7px; left: 7px;">
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/CSS3_and_HTML5_logos_and_wordmarks.svg/1280px-CSS3_and_HTML5_logos_and_wordmarks.svg.png" alt="" style="position:relative; right:-15px;">
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Firebase_icon.svg/2048px-Firebase_icon.svg.png" alt="" style="position:relative; right:-20px;">
+    <img src="https://python-visualization.github.io/folium/latest/_images/folium_logo.png" alt="" style="position:relative; right:-20px;">
 </div>
 </body>
 </html>
